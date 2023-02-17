@@ -1,0 +1,42 @@
+azure:
+  activedirectory:
+    # Specifies your Active Directory ID:
+    tenant-id: 363f0fef-0619-473d-bf47-528738bf96a0
+    # Specifies your App Registration's Application ID:
+    client-id: 4590bf39-28a3-4536-8008-4af5f19d668c
+    # Specifies your App Registration's secret key:
+    client-secret: A1T8Q~8PZdmJ.SBOfG1V0JDGGclAwtnkjuxZCaTC
+    # Specifies the post-log-out-redirect-uri, where to return your app after logout.
+    post-logout-redirect-uri: http://localhost:8080
+    authorization-clients:
+      web-api:
+        scopes: api://bdff0f3e-05d4-4ac6-91ce-3995c94f5529/access_as_user
+    # Specifies the Microsoft Graph scopes that your app needs access to - not required in this app.
+    # authorization-clients:
+    #   graph:
+    #     scopes: https://graph.microsoft.com/User.Read
+
+# which routes to restrict to authenticated users only (see SecurityConfig.java):
+# enter String array (comma-separated) or just one route.
+# e.g. authenticated: /route1, /route2, /route3
+app:
+  protect:
+    authenticated: /token_details, /admin_only, /regular_user
+    roles: /admin_only admin, /regular_user admin user
+  
+  sessionParam: msalAuth
+
+  roles: admin PrivilegedAdmin, user RegularUser
+
+  api:
+    base-address: http://localhost:8082
+    date-endpoint: /api/date
+
+# un-comment the following lines if you are deploying to a reverse proxy (e.g. Azure App Service)
+# server:
+#   forward-headers-strategy: native
+#   tomcat:
+#     remoteip:
+#       protocol-header: "X-Forwarded-Proto"
+#       remote-ip-header: "X-Forwarded-For"
+#       internal-proxies: ".*"
