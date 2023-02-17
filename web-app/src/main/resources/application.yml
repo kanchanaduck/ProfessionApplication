@@ -21,12 +21,12 @@ azure:
 # e.g. authenticated: /route1, /route2, /route3
 app:
   protect:
-    authenticated: /token_details, /admin_only, /regular_user
-    roles: /admin_only admin, /regular_user admin user
+    authenticated: /token_details, /admin_only, /regular_user, /admin-page, profession-page, /sre-page
+    roles: /admin_only admin, /regular_user admin user,
   
   sessionParam: msalAuth
 
-  roles: admin PrivilegedAdmin, user RegularUser
+  roles: admin PrivilegedAdmin, user RegularUser Developer.Read.All Developer.ReadWrite.All SRE.Read.All SRE.ReadWrite.All
 
   api:
     base-address: http://localhost:8082

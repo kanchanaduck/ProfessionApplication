@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/">Microsoft Identity Platform</a>
     <span class="navbar-text">Authorization II: Use Active Directory Spring Boot Starter to control access by app roles</span>
     <div class="btn-group ml-auto dropleft">
@@ -22,4 +22,69 @@
             </th:block>
         </ul>
     </div>
+</nav> -->
+
+
+<style>
+    .bg-nav-orange{
+        background: #FFE0B2;
+    }
+    .bg-nav-yellow{
+        background: #FFD54F;
+    }
+    .bg-nav-green{
+        background: #DCEDC8;
+    }
+</style>
+
+
+<th:block sec:authorize="isAnonymous()">
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-nav-orange border-bottom box-shadow mb-3 p-0">
+    <div class="container p-0">
+        <a class="navbar-brand" href="./">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between bg-nav-orange">
+            <ul class="navbar-nav flex-grow-1">
+                
+            </ul>
+            <ul class="navbar-nav bg-nav-orange">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" href="/oauth2/authorization/azure">Sign in</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
+</th:block>
+
+<th:block sec:authorize="isAuthenticated()">
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-nav-orange border-bottom box-shadow mb-3 p-0">
+    <div class="container p-0">
+        <a class="navbar-brand">Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between  bg-nav-green">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark bg-nav-yellow" href="./">
+                    	<strong>Profession</strong>
+                    </a>
+                </li>
+            </ul>
+            <div class="flex-fill text-uppercase"><th:block sec:authentication="name"></th:block></div>
+            <ul class="navbar-nav bg-nav-orange">
+                <li>
+                    <form action="#" th:action="@{/logout}" method="post">
+                        <input class="btn bg-nav-orange" type="submit" value="Sign Out" />
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</th:block>

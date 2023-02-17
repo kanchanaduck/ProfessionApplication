@@ -1,0 +1,50 @@
+<style>
+	.bg-content-blue{
+		background: #BBDEFB;
+	}
+	.bg-content-green{
+		background: #388E3C;
+	}
+</style>
+
+<div class="mb-5">
+    <p>You are accessing Profession page</p>
+    <p>Your role is: <th:block th:text="${role_name}"></th:block>.<th:block th:text="${accessing}"></th:block></p>
+    <p>You have accessing in <th:block th:text="${accessing.toUpperCase()}"></th:block> Profession below</p>
+    <p>You have NO-ACCESS to Profession data</p>
+</div>
+
+<div class="card card-body text-center">
+    <p>This is special page only visible to AdminRole</p>
+    <p>Only AdminRole can access this page</p>
+</div>
+
+<div class="row mt-3" id="developer">
+    <div class="col">
+        <div class="card text-center" th:classappend="${#strings.equals(accessing, 'Read')}? 'bg-content-blue':'bg-content-green'"} style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Programming</h5>
+                <p>NET, Java, Python, Javascript</p>
+                <a href="#" class="text-sm stretched-link">Go</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card text-center" th:classappend="${#strings.equals(accessing, 'Read')}? 'bg-content-blue':'bg-content-green'"} style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Dev-Method</h5>
+                <p>Agile, Waterfall</p>
+                <a href="#" class="text-sm stretched-link">Go</a>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card text-center" th:classappend="${#strings.equals(accessing, 'Read')}? 'bg-content-blue':'bg-content-green'"} style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">Test tool</h5>
+                <p>JUnit5, Mocha, PyTest</p>
+                <a href="#" class="text-sm stretched-link">Go</a>
+            </div>
+        </div>
+    </div>
+</div>
