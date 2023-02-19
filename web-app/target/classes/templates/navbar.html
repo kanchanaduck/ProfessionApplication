@@ -35,6 +35,9 @@
     .bg-nav-green{
         background: #DCEDC8;
     }
+    .bg-nav-blue{
+        background: #6cb4f0;
+    }
 </style>
 
 
@@ -73,6 +76,11 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark bg-nav-yellow" href="./">
                     	<strong>Profession</strong>
+                    </a>
+                </li>
+                <li class="nav-item" th:if="${#strings.equals(role,'Profession.Admin')}">
+                    <a class="nav-link text-dark bg-nav-blue" th:href="@{/admin-page}">
+                    	<strong>Admin</strong>
                     </a>
                 </li>
             </ul>

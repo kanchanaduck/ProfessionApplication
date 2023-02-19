@@ -5,14 +5,29 @@ package com.microsoft.azuresamples.msal4j.msidentityspringbootwebapp;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.microsoft.aad.msal4j.IAuthenticationResult;
+
+import net.minidev.json.JSONObject;
+
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -22,6 +37,14 @@ public class SampleController {
     @Autowired
     HttpServletRequest req;
 
+    /* private String hydrateUI(Model model, String fragment) {
+        String path = req.getServletPath();
+        String role = "";
+
+        model.addAttribute("bodyContent", String.format("content/%s.html", fragment));
+
+        return "base"; //base.html in /templates folder.
+    } */
     /**
      * Add HTML partial fragment from /templates/content folder to request and serve base html
      * @param model Model used for placing user param and bodyContent param in request before serving UI.
@@ -29,42 +52,39 @@ public class SampleController {
      * @param fragment used to determine which partial to put into UI
      */
     private String hydrateUI(Model model, String fragment) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String path = req.getServletPath();
         String role;
-        String role_name;
-        String accessing;
+        boolean readwrite = authentication.getAuthorities().stream().anyMatch(
+                            r -> r.getAuthority().equals("APPROLE_Developer.ReadWrite.All") || 
+                            r.getAuthority().equals("APPROLE_SRE.ReadWrite.All")  ||
+                            r.getAuthority().equals("APPROLE_Profession.Admin")  );
+
+        boolean show_sre = authentication.getAuthorities().stream().anyMatch(
+                            r -> r.getAuthority().equals("APPROLE_SRE.Read.All") || 
+                            r.getAuthority().equals("APPROLE_SRE.ReadWrite.All")  );
+        
+        boolean show_developer = authentication.getAuthorities().stream().anyMatch(
+            r -> r.getAuthority().equals("APPROLE_Developer.Read.All") || 
+            r.getAuthority().equals("APPROLE_Developer.ReadWrite.All")  );
+
         if (path.equals("/regular_user")) {
             role = "PrivilegedAdmin, RegularUser";
-            role_name = "";
-            accessing = "";
         } else if (path.equals("/admin_only")) {
             role = "PrivilegedAdmin";
-            role_name = "";
-            accessing = "";
         } else if (path.equals("/admin-page")) {
-            role = "Developer.Read.All";
-            role_name = "Developer";
-            accessing = "Read";
+            role = "Admin";
         } else if (path.equals("/profession-page")) {
-            role = "Developer.ReadWrite.All";
-            role_name = "Developer";
-            accessing = "ReadWrite";
-        } else if (path.equals("/sre-r-page")) {
-            role = "SRE.Read.All";
-            role_name = "SRE";
-            accessing = "Read";
-        } else if (path.equals("/sre-rw-page")) {
-            role = "SRE.ReadWrite.All";
-            role_name = "SRE";
-            accessing = "ReadWrite";
-        }else {
+            role = "Developer, SRE";
+        } else if (path.equals("/dashboard-page")) {
+            role = "Developer, SRE";
+        } else {
             role = "ROLES UNKNOWN FOR THIS REQUEST";
-            role_name = "";
-            accessing = "";
         }
         model.addAttribute("role", role);
-        model.addAttribute("role_name", role_name);
-        model.addAttribute("accessing", accessing);
+        model.addAttribute("readwrite", readwrite);
+        model.addAttribute("show_sre", show_sre);
+        model.addAttribute("show_developer", show_developer);
 
         model.addAttribute("bodyContent", String.format("content/%s.html", fragment));
 
@@ -120,64 +140,29 @@ public class SampleController {
      * @return String the UI.
      */
     @GetMapping(path = "/regular_user")
-    @PreAuthorize("hasAnyAuthority('APPROLE_PrivilegedAdmin','APPROLE_RegularUser','APPROLE_Developer.Read.All')")
+    @PreAuthorize("hasAnyAuthority('APPROLE_PrivilegedAdmin','APPROLE_RegularUser')")
     public String regularUser(Model model) {
         // method decorator limits access to this endpoint to either app role
         return hydrateUI(model, "role");
     }
     
-    /**
-     *  Admin Only endpoint
-     *  Demonstrates how to filter so only users with admin role can access.
-     * @param req used to determine which endpoint triggered this, in order to display required roles.
-     * @param model Model used for placing user param and bodyContent param in request before serving UI.
-     * @return String the UI.
-     */
     @GetMapping(path = "/admin-page")
-    @PreAuthorize("hasAuthority('APPROLE_Developer.Read.All')")
-    public String developerReadAll(Model model) {
+    @PreAuthorize("hasAuthority('APPROLE_Profession.Admin')")
+    public String adminPage(Model model, @AuthenticationPrincipal OidcUser principal) {
         // method decorator limits access to this endpoint to either app role
         return hydrateUI(model, "content");
     }
     
-    /**
-     *  Admin Only endpoint
-     *  Demonstrates how to filter so only users with admin role can access.
-     * @param req used to determine which endpoint triggered this, in order to display required roles.
-     * @param model Model used for placing user param and bodyContent param in request before serving UI.
-     * @return String the UI.
-     */
     @GetMapping(path = "/profession-page")
-    @PreAuthorize("hasAuthority('APPROLE_Developer.ReadWrite.All')")
-    public String developerReadWriteAll(Model model) {
+    @PreAuthorize("hasAnyAuthority('APPROLE_Developer.Read.All','APPROLE_SRE.Read.All','APPROLE_Developer.ReadWrite.All','APPROLE_SRE.ReadWrite.All','APPROLE_Profession.Admin')")
+    public String professionPage(Model model) {
         // method decorator limits access to this endpoint to either app role
         return hydrateUI(model, "content");
     }
 
-    /**
-     *  Admin Only endpoint
-     *  Demonstrates how to filter so only users with admin role can access.
-     * @param req used to determine which endpoint triggered this, in order to display required roles.
-     * @param model Model used for placing user param and bodyContent param in request before serving UI.
-     * @return String the UI.
-     */
-    @GetMapping(path = "/sre-r-page")
-    @PreAuthorize("hasAuthority('APPROLE_SRE.Read.All')")
-    public String SREReadAll(Model model) {
-        // method decorator limits access to this endpoint to either app role
-        return hydrateUI(model, "content");
-    }
-    
-    /**
-     *  Admin Only endpoint
-     *  Demonstrates how to filter so only users with admin role can access.
-     * @param req used to determine which endpoint triggered this, in order to display required roles.
-     * @param model Model used for placing user param and bodyContent param in request before serving UI.
-     * @return String the UI.
-     */
-    @GetMapping(path = "/sre-rw-page")
-    @PreAuthorize("hasAuthority('APPROLE_SRE.ReadWrite.All')")
-    public String SREReadWriteAll(Model model) {
+    @GetMapping(path = "/dashboard-page")
+    @PreAuthorize("hasAnyAuthority('APPROLE_Developer.Read.All','APPROLE_SRE.Read.All','APPROLE_Developer.ReadWrite.All','APPROLE_SRE.ReadWrite.All','APPROLE_Profession.Admin')")
+    public String dashboardPage(Model model) {
         // method decorator limits access to this endpoint to either app role
         return hydrateUI(model, "content");
     }

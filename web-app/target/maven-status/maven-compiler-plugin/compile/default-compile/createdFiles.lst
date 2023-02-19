@@ -1,4 +1,14 @@
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\SessionManagementHelper.class
 com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\Utilities.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\MsIdentitySpringBootWebappApplication$1.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\AuthHelper.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\BasicConfiguration.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\JSONHelper.class
 com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\SampleController.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\User.class
 com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\MsIdentitySpringBootWebappApplication.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\Course.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\StateData.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\HttpClientHelper.class
+com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\AuthPageController.class
 com\microsoft\azuresamples\msal4j\msidentityspringbootwebapp\SecurityConfig.class

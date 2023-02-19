@@ -12,7 +12,8 @@
   <groupId>com.microsoft.azuresamples.msal4j</groupId>  
   <artifactId>ms-identity-spring-boot-webapp</artifactId>  
   <version>0.0.1-SNAPSHOT</version>  
-  <name>ms-identity-spring-boot-webapp</name>  
+  <name>ms-identity-spring-boot-webapp</name>
+  <packaging>war</packaging>  
   <description>Microsoft identity platform Spring Boot sample</description>  
   <properties> 
     <java.version>11</java.version>  
@@ -59,6 +60,31 @@
 			</exclusion>
 		</exclusions>
 	</dependency>
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>msal4j</artifactId>
+			<version>0.5.0-preview</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>oauth2-oidc-sdk</artifactId>
+			<version>6.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20090211</version>
+		</dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-tomcat</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build> 
     <plugins> 

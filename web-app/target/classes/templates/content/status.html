@@ -34,16 +34,14 @@
 	<p>This Application uses language: Java</p>
 </div>
 
-<div>
-    Use the button on the top right to sign in.
-    Attempts to go to one of the protected pages below will result in automatic redirection to Microsoft identity platform sign in endpoint.
-    <br>
-    <a class="btn btn-success" href="/sign_in_status">Sign-in Status</a>
-    <a class="btn btn-warning" href="/token_details">ID Token Details</a>
-    <a class="btn btn-warning" href="/admin_only">Admins Only</a>
-    <a class="btn btn-warning" href="/regular_user">Regular Users</a>
-    <a class="btn btn-warning" href="/admin-page">Developer.Read.All</a>
-    <a class="btn btn-warning" href="/profession-page">Developer.ReadWrite.All</a>
-    <a class="btn btn-warning" href="/sre-r-page">SRE.Read.All</a>
-    <a class="btn btn-warning" href="/sre-rw-page">SRE.ReadWrite.All</a>
+
+
+<div sec:authorize="isAuthenticated()">
+    <!-- <p><a href="/sign_in_status">Sign-in Status</a></p> -->
+    <p><a th:href="@{/token_details}">ID Token Details</a></p>
+   <!--  <p><a href="/admin_only">Admins Only</a></p>
+    <p><a href="/regular_user">Regular Users</a></p> -->
+    <p><a th:href="@{/admin-page}">Admin</a></p>
+    <p><a th:href="@{/profession-page}">Profession</a></p>
+    <p><a th:href="@{/dashboard-page}">Dashboard</a></p>
 </div>

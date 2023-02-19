@@ -9,42 +9,65 @@
 
 <div class="mb-5">
     <p>You are accessing Profession page</p>
-    <p>Your role is: <th:block th:text="${role_name}"></th:block>.<th:block th:text="${accessing}"></th:block></p>
-    <p>You have accessing in <th:block th:text="${accessing.toUpperCase()}"></th:block> Profession below</p>
-    <p>You have NO-ACCESS to Profession data</p>
+    <p>Your role is the one in:  <th:block th:text="${role}"></th:block></p>
+    <p>You have accessing in <th:block th:text="${readwrite}? 'READ WRITE':'READ'"></th:block> Profession below</p>
 </div>
 
-<div class="card card-body text-center">
-    <p>This is special page only visible to AdminRole</p>
-    <p>Only AdminRole can access this page</p>
+
+<div class="row mt-3" id="developer" th:if="${show_developer}">
+    <div class="col">
+        <div class="card text-center" th:classappend="${readwrite}? 'bg-content-green':'bg-content-blue'" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p></p>
+                <a href="#" class="stretched-link"><small>Go</small></a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row mt-3" id="developer">
+<div class="row mt-3" id="sre" th:if="${show_sre}">
     <div class="col">
-        <div class="card text-center" th:classappend="${#strings.equals(accessing, 'Read')}? 'bg-content-blue':'bg-content-green'"} style="width: 18rem;">
+        <div class="card text-center" th:classappend="${readwrite}? 'bg-content-green':'bg-content-blue'" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">Programming</h5>
-                <p>NET, Java, Python, Javascript</p>
-                <a href="#" class="text-sm stretched-link">Go</a>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card text-center" th:classappend="${#strings.equals(accessing, 'Read')}? 'bg-content-blue':'bg-content-green'"} style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Dev-Method</h5>
-                <p>Agile, Waterfall</p>
-                <a href="#" class="text-sm stretched-link">Go</a>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        <div class="card text-center" th:classappend="${#strings.equals(accessing, 'Read')}? 'bg-content-blue':'bg-content-green'"} style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Test tool</h5>
-                <p>JUnit5, Mocha, PyTest</p>
+                <h5 class="card-title"></h5>
+                <p></p>
                 <a href="#" class="text-sm stretched-link">Go</a>
             </div>
         </div>
     </div>
 </div>
+
+
+<script th:if="${show_developer}">
+    $.ajax({
+        url: "http://localhost:8082/api/courses/developer",
+    }).then(function(data) {
+        $.each(data, function(i, item) {
+            if(i>0){
+                var $button = $('#developer .col:first').clone();
+                $('#developer').append($button);
+            }  
+            $('#developer .card-title').eq( i ).text(item.topic)
+            $('#developer p').eq( i ).text(item.description)
+        });
+        console.log(data)
+    });
+</script>
+
+<script th:if="${show_sre}">
+    $.ajax({
+        url: "http://localhost:8082/api/courses/sre",
+    }).then(function(data) {
+        $.each(data, function(i, item) {
+            if(i>0){
+                var $button = $('#sre .col:first').clone();
+                $('#sre').append($button);
+            }  
+            $('#sre .card-title').eq( i ).text(item.topic)
+            $('#sre p').eq( i ).text(item.description)
+        });
+        console.log(data)
+    });
+</script>
+
