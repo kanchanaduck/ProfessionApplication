@@ -5,7 +5,7 @@ azure:
     # Specifies your App Registration's Application ID:
     client-id: 4590bf39-28a3-4536-8008-4af5f19d668c
     # Specifies your App Registration's secret key:
-    client-secret: A1T8Q~8PZdmJ.SBOfG1V0JDGGclAwtnkjuxZCaTC
+    client-secret: ${CLIENT_SECRET}
     # Specifies the post-log-out-redirect-uri, where to return your app after logout.
     post-logout-redirect-uri: http://localhost:8080
     authorization-clients:
@@ -45,7 +45,7 @@ app:
 # aad:
 #   clientId: 4590bf39-28a3-4536-8008-4af5f19d668c
 #   authority: https://login.microsoftonline.com/363f0fef-0619-473d-bf47-528738bf96a0/
-#   secretKey: A1T8Q~8PZdmJ.SBOfG1V0JDGGclAwtnkjuxZCaTC
+#   secretKey: ${CLIENT_SECRET}
 #   redirectUriSignin: https://localhost:8080/msal4jsample/secure/aad
 #   redirectUriGraph: https://localhost:8080/msal4jsample/graph/me
 #   msGraphEndpointHost: https://graph.microsoft.com/
